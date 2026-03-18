@@ -1,40 +1,47 @@
 package com.exemple.hellotoast;
 
-//  Imports nécessaires
+// ✅ Imports nécessaires
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
-import android.widget.Button;
+import android.widget.EditText;
+import android.widget.CheckBox;
 import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
-    // Déclaration d'une variable pour stocker la valeur du compteur
-    private int count = 0;
-
-    // Référence vers le composant TextView
-    private TextView textCount;
+    // Déclaration des éléments de l'interface
+    private EditText surfaceInput, piecesInput;
+    private CheckBox piscineCheckbox;
+    private TextView resultView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main); // lie le XML au code
+        setContentView(R.layout.activity_main);
 
-        // Liaison des composants XML avec le code Java
-        textCount = findViewById(R.id.text_count);
-        Button buttonToast = findViewById(R.id.button_toast);
-        Button buttonCount = findViewById(R.id.button_count);
+        // Liaison XML <-> Java
+        surfaceInput    = findViewById(R.id.input_surface);
+        piecesInput     = findViewById(R.id.input_pieces);
+        piscineCheckbox = findViewById(R.id.checkbox_piscine);
+        resultView      = findViewById(R.id.result);
 
-        // Lorsque l'utilisateur clique sur "Afficher un message"
-        buttonToast.setOnClickListener(v -> {
-            Toast.makeText(this, "Bonjour !", Toast.LENGTH_SHORT).show();
-        });
+        // Écouteur du bouton "Calculer"
+        findViewById(R.id.button_calcul).setOnClickListener(v -> calculer());
+    }
 
-        // Lorsque l'utilisateur clique sur "Incrémenter le compteur"
-        buttonCount.setOnClickListener(v -> {
-            count++; // ajoute 1
-            textCount.setText(String.valueOf(count)); // affiche la nouvelle valeur
-        });
+    private void calculer() {
+        // Lecture des valeurs saisies
+        double surface = Double.parseDouble(surfaceInput.getText().toString());
+        int pieces     = Integer.parseInt(piecesInput.getText().toString());
+        boolean piscine = piscineCheckbox.isChecked();
+
+        // Calcul des impôts
+        double impotBase  = surface * 2;
+        double supplement = pieces * 50 + (piscine ? 100 : 0);
+        double total      = impotBase + supplement;
+
+        // Affichage du résultat
+        resultView.setText("Impôt total : " + total + " DH");
     }
 }
